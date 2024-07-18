@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CalculationPad from "../components/calculator/CalculationPad";
 import CalculatorNumberPad from "../components/calculator/CalculatorNumberPad";
 import { calculatorBtn } from "../constant/calculator/calculationBtn";
@@ -7,12 +7,17 @@ import { calculate } from "../utils/calculation";
 
 const Calculator = () => {
   const [result, setResult] = useState<string>("0");
+  const resultInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (resultInputRef.current) {
+      resultInputRef.current.focus();
+    }
+  }, []);
   // Mouse Click Event
   // 결과
   const handleGetResultClick = () => {
     const evaluatedResult = calculate(result);
-    console.log(evaluatedResult);
     setResult(evaluatedResult.toString());
   };
 
@@ -82,6 +87,7 @@ const Calculator = () => {
       </button>
       <div className="w-[400px] h-[367px] bg-calculatorBg p-[25px]">
         <input
+          ref={resultInputRef}
           value={result}
           readOnly
           className="mb-5 shadow-custom-dark text-end text-white text-[32px] w-[350px] h-[70px] px-[30px] rounded-3xl bg-calculatorResultView outline-none"
